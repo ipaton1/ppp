@@ -453,9 +453,9 @@ waitForPADO(PPPoEConnection *conn, int timeout)
 		continue;
 	    }
 	    if (parsePacket(&packet, parsePADOTags, &pc) < 0)
-		continue;
+		return;
 	    if (conn->error)
-		continue;
+		return;
 	    if (!pc.seenACName) {
 		error("Ignoring PADO packet with no AC-Name tag");
 		continue;
@@ -478,9 +478,10 @@ waitForPADO(PPPoEConnection *conn, int timeout)
 	    if (pc.acNameOK && pc.serviceNameOK && conn->discoveryState != STATE_RECEIVED_PADO) {
 		memcpy(conn->peerEth, packet.ethHdr.h_source, ETH_ALEN);
 		conn->discoveryState = STATE_RECEIVED_PADO;
+		break;
 	    }
 	}
-    } while (pppoe_verbose >= 1 || conn->discoveryState != STATE_RECEIVED_PADO);
+    } while (conn->discoveryState != STATE_RECEIVED_PADO);
 }
 
 /***********************************************************************
