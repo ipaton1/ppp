@@ -195,6 +195,8 @@ PPPOEConnectDevice(void)
 	memcpy(conn->hostUniq.payload, &pid, sizeof(pid));
     }
 
+    conn->discoveryTimeout=pppoe_padi_timeout;
+    conn->discoveryAttempts=pppoe_padi_attempts;
     conn->acName = acName;
     conn->serviceName = pppd_pppoe_service;
     ppp_set_pppdevnam(devnam);
